@@ -16,3 +16,4 @@ pandas == 1.0.3
 # pcdh_notebook/.ipynb_checkpoints/analysis-checkpoint.ipynb: 7
 # pcdh_notebook/analysis.ipynb: 7
 seaborn == 0.10.0
+xlrd
