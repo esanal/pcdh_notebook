@@ -11,6 +11,7 @@ import pandas as pd
 import numpy as np
 import math
 import seaborn as sns
+import scipy.stats as stats
 from matplotlib import pyplot as plt
 from utilities import *
 
@@ -173,22 +174,23 @@ proteins_br2['Normalized Ratio L/H 2'] = -1*np.log2(proteins_br2['Ratio H/L 2'] 
 # ## Correlation of technical replicates
 # ### BR1: TR1 and TR2
 
-# In[53]:
+# In[181]:
 
 
 #BR1: TR1 and TR2
-sns.jointplot(x="Normalized Ratio L/H 1", y="Normalized Ratio L/H 2", data=proteins_br1, kind="reg")
+br1_tr1_tr2 = sns.jointplot(x="Normalized Ratio L/H 1", y="Normalized Ratio L/H 2", data=proteins_br1, kind="reg")
+br1_tr1_tr2.annotate(stats.pearsonr)
 plt.savefig('BR1_TR1&TR2_correlation.svg')
-sns.jointplot(x="Normalized Ratio L/H IEF1_1", y="Normalized Ratio L/H IEF1_2", data=proteins, kind="reg")
 
 
 # ### BR2: TR1 and TR2
 
-# In[58]:
+# In[182]:
 
 
 #BR2: TR1 and TR2
-sns.jointplot(x="Normalized Ratio L/H 1", y="Normalized Ratio L/H 2", data=proteins_br2, kind="reg")
+br2_tr1_tr2 = sns.jointplot(x="Normalized Ratio L/H 1", y="Normalized Ratio L/H 2", data=proteins_br2, kind="reg")
+br2_tr1_tr2.annotate(stats.pearsonr)
 plt.savefig('BR2_TR1&TR2_correlation.svg')
 
 
@@ -201,7 +203,6 @@ plt.savefig('BR2_TR1&TR2_correlation.svg')
 proteins['Norm LH BR1'] = (proteins['Normalized Ratio L/H IEF1_1'] + proteins['Normalized Ratio L/H IEF1_2']) / 2
 proteins['Norm LH BR2'] = (proteins['Normalized Ratio L/H IEF2_1'] + proteins['Normalized Ratio L/H IEF2_2']) / 2
 g=sns.jointplot(x="Norm LH BR1", y="Norm LH BR2", data=proteins, kind="reg")
-import scipy.stats as stats
 g.annotate(stats.pearsonr)
 plt.savefig('BR1&BR2_correlation.svg')
 # Corr. of seperate analysis
@@ -211,7 +212,7 @@ plt.savefig('BR1&BR2_correlation.svg')
 
 # ## Summary table
 
-# In[173]:
+# In[183]:
 
 
 summary_df = {"Protein Groups": [len(proteins[["Ratio H/L IEF1_1", "Ratio H/L IEF1_2"]].dropna()),
@@ -224,14 +225,8 @@ summary_df = {"Protein Groups": [len(proteins[["Ratio H/L IEF1_1", "Ratio H/L IE
              }
 
 
-# In[179]:
+# In[184]:
 
 
 summary_df
-
-
-# In[ ]:
-
-
-
 
