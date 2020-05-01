@@ -18,7 +18,7 @@ from utilities import *
 
 # ### Data import & filter
 
-# In[48]:
+# In[2]:
 
 
 #Read from txt and xlsx and filter
@@ -57,7 +57,7 @@ proteins['Normalized Ratio L/H IEF2_2'] = -1*np.log2(proteins['Ratio H/L IEF2_2'
 
 # ## Significant proteins and distribution of Normalized H/L ratios
 
-# In[49]:
+# In[3]:
 
 
 #Find significantly up and down regulated proteins
@@ -72,7 +72,7 @@ significants.to_csv('Significants_90.txt', sep='\t', index=False)
 proteins.to_csv('proteins_all_90.txt', sep='\t', index=False)
 
 
-# In[50]:
+# In[4]:
 
 
 #LH distribution boxplots
@@ -94,7 +94,7 @@ ax.yaxis.grid(True, linestyle='-', which='major', color='lightgrey',
 fig.savefig('LH_boxplot_normalized.svg', bbox_inches='tight')
 
 
-# In[51]:
+# In[5]:
 
 
 #LH histogram combined
@@ -150,7 +150,7 @@ proteins.to_csv('proteins_all_LH.txt', sep = '\t', index = False)
 
 # ## Correlation of biological replicates
 
-# In[52]:
+# In[6]:
 
 
 proteins_br1 = pd.read_excel('IEF1_7_1.xlsx', index_col='id', delimiter = '\t')
@@ -174,7 +174,7 @@ proteins_br2['Normalized Ratio L/H 2'] = -1*np.log2(proteins_br2['Ratio H/L 2'] 
 # ## Correlation of technical replicates
 # ### BR1: TR1 and TR2
 
-# In[181]:
+# In[7]:
 
 
 #BR1: TR1 and TR2
@@ -185,7 +185,7 @@ plt.savefig('BR1_TR1&TR2_correlation.svg')
 
 # ### BR2: TR1 and TR2
 
-# In[182]:
+# In[8]:
 
 
 #BR2: TR1 and TR2
@@ -196,7 +196,7 @@ plt.savefig('BR2_TR1&TR2_correlation.svg')
 
 # ### Compare BR1 and BR2
 
-# In[63]:
+# In[9]:
 
 
 # Compare BR1 and BR2 (maxquant report of the main combined protein list)
@@ -212,7 +212,7 @@ plt.savefig('BR1&BR2_correlation.svg')
 
 # ## Summary table
 
-# In[183]:
+# In[10]:
 
 
 summary_df = {"Protein Groups": [len(proteins[["Ratio H/L IEF1_1", "Ratio H/L IEF1_2"]].dropna()),
@@ -225,8 +225,16 @@ summary_df = {"Protein Groups": [len(proteins[["Ratio H/L IEF1_1", "Ratio H/L IE
              }
 
 
-# In[184]:
+# In[16]:
 
 
 summary_df
 
+
+# | Group                      | Count |
+# |:------------------------------------------|:---|
+# | Protein groups | BR1: 3002, BR2: 2277 |
+# | Protein groups common to both replicates | 4094 |
+# | Significantly regulated proteins: H vs L | 666 |
+# | Singificant proteins in Light label      | 267 |
+# | Singificant proteins in Heavy label      | 399 |
