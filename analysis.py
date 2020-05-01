@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[3]:
+# In[1]:
 
 
 import matplotlib
@@ -17,7 +17,7 @@ from utilities import *
 
 # ### Data import & filter
 
-# In[4]:
+# In[48]:
 
 
 #Read from txt and xlsx and filter
@@ -39,7 +39,7 @@ for i in proteins.index:
         if identifier in uniprot_human_list:
             gn = uniprot_human[uniprot_human['Entry'] == identifier]['Gene names'].tolist()[0]
             if type(gn) == str:
-                gns.append(gn.split(' ')[0])
+                gns.append(gn.split(';')[0].split(' ')[0])
     if gns != []: #update if there is at least one protein
         proteins.at[i,'Human_GN'] = gns[0] #there are 108 protein groups with multiple names, reduce it by seleting the first one
 #select the protein id of main list and replicates
@@ -56,7 +56,7 @@ proteins['Normalized Ratio L/H IEF2_2'] = -1*np.log2(proteins['Ratio H/L IEF2_2'
 
 # ## Significant proteins and distribution of Normalized H/L ratios
 
-# In[5]:
+# In[49]:
 
 
 #Find significantly up and down regulated proteins
@@ -71,7 +71,7 @@ significants.to_csv('Significants_90.txt', sep='\t', index=False)
 proteins.to_csv('proteins_all_90.txt', sep='\t', index=False)
 
 
-# In[6]:
+# In[50]:
 
 
 #LH distribution boxplots
@@ -93,7 +93,7 @@ ax.yaxis.grid(True, linestyle='-', which='major', color='lightgrey',
 fig.savefig('LH_boxplot_normalized.svg', bbox_inches='tight')
 
 
-# In[7]:
+# In[51]:
 
 
 #LH histogram combined
@@ -149,7 +149,7 @@ proteins.to_csv('proteins_all_LH.txt', sep = '\t', index = False)
 
 # ## Correlation of biological replicates
 
-# In[8]:
+# In[52]:
 
 
 proteins_br1 = pd.read_excel('IEF1_7_1.xlsx', index_col='id', delimiter = '\t')
@@ -173,7 +173,7 @@ proteins_br2['Normalized Ratio L/H 2'] = -1*np.log2(proteins_br2['Ratio H/L 2'] 
 # ## Correlation of technical replicates
 # ### BR1: TR1 and TR2
 
-# In[9]:
+# In[53]:
 
 
 #BR1: TR1 and TR2
@@ -184,26 +184,54 @@ sns.jointplot(x="Normalized Ratio L/H IEF1_1", y="Normalized Ratio L/H IEF1_2", 
 
 # ### BR2: TR1 and TR2
 
-# In[10]:
+# In[58]:
 
 
 #BR2: TR1 and TR2
 sns.jointplot(x="Normalized Ratio L/H 1", y="Normalized Ratio L/H 2", data=proteins_br2, kind="reg")
 plt.savefig('BR2_TR1&TR2_correlation.svg')
-sns.jointplot(x="Normalized Ratio L/H IEF2_1", y="Normalized Ratio L/H IEF2_2", data=proteins, kind="reg")
 
 
 # ### Compare BR1 and BR2
 
-# In[11]:
+# In[63]:
 
 
 # Compare BR1 and BR2 (maxquant report of the main combined protein list)
 proteins['Norm LH BR1'] = (proteins['Normalized Ratio L/H IEF1_1'] + proteins['Normalized Ratio L/H IEF1_2']) / 2
 proteins['Norm LH BR2'] = (proteins['Normalized Ratio L/H IEF2_1'] + proteins['Normalized Ratio L/H IEF2_2']) / 2
-sns.jointplot(x="Norm LH BR1", y="Norm LH BR2", data=proteins, kind="reg")
+g=sns.jointplot(x="Norm LH BR1", y="Norm LH BR2", data=proteins, kind="reg")
+import scipy.stats as stats
+g.annotate(stats.pearsonr)
 plt.savefig('BR1&BR2_correlation.svg')
 # Corr. of seperate analysis
 #br_merged = proteins_br1.merge(proteins_br2, left_on="Protein IDs", right_on="Protein IDs")
 #sns.jointplot(x="Normalized Ratio L/H_x", y="Normalized Ratio L/H_y", data=br_merged, kind="reg")
+
+
+# ## Summary table
+
+# In[173]:
+
+
+summary_df = {"Protein Groups": [len(proteins[["Ratio H/L IEF1_1", "Ratio H/L IEF1_2"]].dropna()),
+                                 len(proteins[["Ratio H/L IEF2_1", "Ratio H/L IEF2_2"]].dropna())],
+              "Protein groups common to both replicates": proteins["Ratio H/L"].count(),
+              "Significantly regulated proteins: H vs L": sum(proteins["significant"]==True),
+              "Singificant proteins in Light label": len(proteins[(proteins["significant"]) & (proteins["Normalized Ratio L/H"]>0)]),
+              "Singificant proteins in Heavy label": len(proteins[(proteins["significant"]) & (proteins["Normalized Ratio L/H"]<0)]) 
+             
+             }
+
+
+# In[179]:
+
+
+summary_df
+
+
+# In[ ]:
+
+
+
 
