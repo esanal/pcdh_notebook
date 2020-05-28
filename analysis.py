@@ -55,13 +55,26 @@ proteins['Normalized Ratio L/H IEF2_1'] = -1*np.log2(proteins['Ratio H/L IEF2_1'
 proteins['Normalized Ratio L/H IEF2_2'] = -1*np.log2(proteins['Ratio H/L IEF2_2'] / proteins['Ratio H/L IEF2_2'].median())
 
 
-# ## Significant proteins and distribution of Normalized H/L ratios
+# ### Normality test
 
 # In[3]:
 
 
+from statsmodels.graphics.gofplots import qqplot
+from scipy.stats import shapiro
+from scipy.stats import kstest
+
+qqplot(proteins['Normalized Ratio L/H'], line='s')
+kstest(proteins['Normalized Ratio L/H'], 'norm')
+
+
+# ## Significant proteins and distribution of Normalized H/L ratios
+
+# In[4]:
+
+
 #Find significantly up and down regulated proteins
-#90% confidence interval edian absoulute deviation
+#90% confidence interval median absoulute deviation
 median = proteins['Normalized Ratio L/H'].median()
 MAD = np.absolute(proteins['Normalized Ratio L/H']-median).median() * 1.4826
 proteins['significant'] = np.absolute(proteins['Normalized Ratio L/H']-median)/MAD > 1.645
@@ -72,7 +85,7 @@ significants.to_csv('Significants_90.txt', sep='\t', index=False)
 proteins.to_csv('proteins_all_90.txt', sep='\t', index=False)
 
 
-# In[4]:
+# In[5]:
 
 
 #LH distribution boxplots
@@ -94,7 +107,7 @@ ax.yaxis.grid(True, linestyle='-', which='major', color='lightgrey',
 fig.savefig('LH_boxplot_normalized.svg', bbox_inches='tight')
 
 
-# In[5]:
+# In[6]:
 
 
 #LH histogram combined
@@ -150,7 +163,7 @@ proteins.to_csv('proteins_all_LH.txt', sep = '\t', index = False)
 
 # ## Correlation of biological replicates
 
-# In[6]:
+# In[7]:
 
 
 proteins_br1 = pd.read_excel('IEF1_7_1.xlsx', index_col='id', delimiter = '\t')
@@ -174,7 +187,7 @@ proteins_br2['Normalized Ratio L/H 2'] = -1*np.log2(proteins_br2['Ratio H/L 2'] 
 # ## Correlation of technical replicates
 # ### BR1: TR1 and TR2
 
-# In[7]:
+# In[8]:
 
 
 #BR1: TR1 and TR2
@@ -185,7 +198,7 @@ plt.savefig('BR1_TR1&TR2_correlation.svg')
 
 # ### BR2: TR1 and TR2
 
-# In[8]:
+# In[9]:
 
 
 #BR2: TR1 and TR2
@@ -196,7 +209,7 @@ plt.savefig('BR2_TR1&TR2_correlation.svg')
 
 # ### Compare BR1 and BR2
 
-# In[9]:
+# In[10]:
 
 
 # Compare BR1 and BR2 (maxquant report of the main combined protein list)
@@ -212,7 +225,7 @@ plt.savefig('BR1&BR2_correlation.svg')
 
 # ## Summary table
 
-# In[10]:
+# In[11]:
 
 
 summary_df = {"Protein Groups": [len(proteins[["Ratio H/L IEF1_1", "Ratio H/L IEF1_2"]].dropna()),
@@ -225,7 +238,7 @@ summary_df = {"Protein Groups": [len(proteins[["Ratio H/L IEF1_1", "Ratio H/L IE
              }
 
 
-# In[16]:
+# In[12]:
 
 
 summary_df
