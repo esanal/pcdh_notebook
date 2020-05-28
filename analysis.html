@@ -13076,7 +13076,7 @@ div#notebook {
 
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[1]:</div>
+<div class="prompt input_prompt">In&nbsp;[13]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib</span>
@@ -13105,18 +13105,18 @@ div#notebook {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[2]:</div>
+<div class="prompt input_prompt">In&nbsp;[15]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#Read from txt and xlsx and filter</span>
-<span class="n">proteins</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;proteinGroups.txt&#39;</span><span class="p">,</span> <span class="n">index_col</span><span class="o">=</span><span class="s1">&#39;id&#39;</span><span class="p">,</span> <span class="n">delimiter</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="se">\t</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="n">proteins</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;data/proteinGroups.txt&#39;</span><span class="p">,</span> <span class="n">index_col</span><span class="o">=</span><span class="s1">&#39;id&#39;</span><span class="p">,</span> <span class="n">delimiter</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="se">\t</span><span class="s1">&#39;</span><span class="p">)</span>
 <span class="c1">#filter and keep the replicates separate</span>
 <span class="n">proteins</span> <span class="o">=</span> <span class="n">remove_cont_and_nan</span><span class="p">(</span><span class="n">proteins</span><span class="p">)</span>
 <span class="c1"># Filtering non human proteins from the main file</span>
 <span class="n">proteins</span><span class="p">[</span><span class="s1">&#39;genename&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">proteins</span><span class="p">[</span><span class="s1">&#39;Gene names&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">str</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 <span class="n">proteins</span><span class="p">[</span><span class="s1">&#39;Fastas&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">proteins</span><span class="p">[</span><span class="s1">&#39;Fasta headers&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;;&#39;</span><span class="p">)</span>
 <span class="c1">#read uniprot human data</span>
-<span class="n">uniprot_human</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;uniprot_human_gn.tab.tsv&#39;</span><span class="p">,</span> <span class="n">sep</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="se">\t</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="n">uniprot_human</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;data/uniprot_human_gn.tab.tsv&#39;</span><span class="p">,</span> <span class="n">sep</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="se">\t</span><span class="s1">&#39;</span><span class="p">)</span>
 <span class="n">uniprot_human_list</span> <span class="o">=</span> <span class="n">uniprot_human</span><span class="o">.</span><span class="n">Entry</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
 <span class="c1">#check if protein group includes human protein</span>
 <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">proteins</span><span class="o">.</span><span class="n">index</span><span class="p">:</span>
@@ -13226,9 +13226,9 @@ div#notebook {
 <span class="n">proteins</span><span class="p">[</span><span class="s1">&#39;significant&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">absolute</span><span class="p">(</span><span class="n">proteins</span><span class="p">[</span><span class="s1">&#39;Normalized Ratio L/H&#39;</span><span class="p">]</span><span class="o">-</span><span class="n">median</span><span class="p">)</span><span class="o">/</span><span class="n">MAD</span> <span class="o">&gt;</span> <span class="mf">1.645</span>
 <span class="c1">#select the significats and save</span>
 <span class="n">significants</span> <span class="o">=</span> <span class="n">proteins</span><span class="p">[(</span><span class="n">proteins</span><span class="p">[</span><span class="s1">&#39;significant&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="kc">True</span><span class="p">)]</span>
-<span class="n">significants</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="s1">&#39;Significants_90.txt&#39;</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">significants</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="s1">&#39;results/Significants_90.txt&#39;</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 <span class="c1">#export all proteins with the significance and normalized ratio</span>
-<span class="n">proteins</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="s1">&#39;proteins_all_90.txt&#39;</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">proteins</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="s1">&#39;results/proteins_all_90.txt&#39;</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 </pre></div>
 
     </div>
@@ -13257,7 +13257,7 @@ div#notebook {
 <span class="n">ax</span><span class="o">.</span><span class="n">yaxis</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;-&#39;</span><span class="p">,</span> <span class="n">which</span><span class="o">=</span><span class="s1">&#39;major&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;lightgrey&#39;</span><span class="p">,</span>
                <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
 <span class="c1"># Save the figure</span>
-<span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s1">&#39;LH_boxplot_normalized.svg&#39;</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s1">&#39;tight&#39;</span><span class="p">)</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s1">&#39;figures/LH_boxplot_normalized.svg&#39;</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s1">&#39;tight&#39;</span><span class="p">)</span>
 </pre></div>
 
     </div>
@@ -13339,8 +13339,8 @@ div#notebook {
                 <span class="n">color</span><span class="o">=</span> <span class="n">colors</span><span class="p">[</span><span class="n">i</span><span class="p">],</span><span class="n">weight</span> <span class="o">=</span> <span class="s1">&#39;bold&#39;</span><span class="p">)</span>    
 <span class="c1">#adjust spines</span>
 <span class="n">adjust_spines</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;left&#39;</span><span class="p">,</span> <span class="s1">&#39;bottom&#39;</span><span class="p">])</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s1">&#39;HL_combined_histogram_GOs_10percent_biggerfont_sized.svg&#39;</span><span class="p">)</span>
-<span class="n">proteins</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="s1">&#39;proteins_all_LH.txt&#39;</span><span class="p">,</span> <span class="n">sep</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="se">\t</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">index</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s1">&#39;figures/HL_combined_histogram_GOs_10percent_biggerfont_sized.svg&#39;</span><span class="p">)</span>
+<span class="n">proteins</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="s1">&#39;results/proteins_all_LH.txt&#39;</span><span class="p">,</span> <span class="n">sep</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="se">\t</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">index</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span>
 </pre></div>
 
     </div>
@@ -13382,8 +13382,8 @@ div#notebook {
 <div class="prompt input_prompt">In&nbsp;[7]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">proteins_br1</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_excel</span><span class="p">(</span><span class="s1">&#39;IEF1_7_1.xlsx&#39;</span><span class="p">,</span> <span class="n">index_col</span><span class="o">=</span><span class="s1">&#39;id&#39;</span><span class="p">,</span> <span class="n">delimiter</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="se">\t</span><span class="s1">&#39;</span><span class="p">)</span>
-<span class="n">proteins_br2</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_excel</span><span class="p">(</span><span class="s1">&#39;IEF2 7_5 with new analysis.xlsx&#39;</span><span class="p">,</span> <span class="n">index_col</span><span class="o">=</span><span class="s1">&#39;id&#39;</span><span class="p">,</span> <span class="n">delimiter</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="se">\t</span><span class="s1">&#39;</span><span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">proteins_br1</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_excel</span><span class="p">(</span><span class="s1">&#39;data/IEF1_7_1.xlsx&#39;</span><span class="p">,</span> <span class="n">index_col</span><span class="o">=</span><span class="s1">&#39;id&#39;</span><span class="p">,</span> <span class="n">delimiter</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="se">\t</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="n">proteins_br2</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_excel</span><span class="p">(</span><span class="s1">&#39;data/IEF2 7_5 with new analysis.xlsx&#39;</span><span class="p">,</span> <span class="n">index_col</span><span class="o">=</span><span class="s1">&#39;id&#39;</span><span class="p">,</span> <span class="n">delimiter</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="se">\t</span><span class="s1">&#39;</span><span class="p">)</span>
 <span class="n">proteins_br1</span> <span class="o">=</span> <span class="n">remove_cont_and_nan</span><span class="p">(</span><span class="n">proteins_br1</span><span class="p">)</span>
 <span class="n">proteins_br2</span> <span class="o">=</span> <span class="n">remove_cont_and_nan</span><span class="p">(</span><span class="n">proteins_br2</span><span class="p">)</span>
 
@@ -13420,7 +13420,7 @@ div#notebook {
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#BR1: TR1 and TR2</span>
 <span class="n">br1_tr1_tr2</span> <span class="o">=</span> <span class="n">sns</span><span class="o">.</span><span class="n">jointplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s2">&quot;Normalized Ratio L/H 1&quot;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s2">&quot;Normalized Ratio L/H 2&quot;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">proteins_br1</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="s2">&quot;reg&quot;</span><span class="p">)</span>
 <span class="n">br1_tr1_tr2</span><span class="o">.</span><span class="n">annotate</span><span class="p">(</span><span class="n">stats</span><span class="o">.</span><span class="n">pearsonr</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s1">&#39;BR1_TR1&amp;TR2_correlation.svg&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s1">&#39;figures/BR1_TR1&amp;TR2_correlation.svg&#39;</span><span class="p">)</span>
 </pre></div>
 
     </div>
@@ -13477,7 +13477,7 @@ div#notebook {
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#BR2: TR1 and TR2</span>
 <span class="n">br2_tr1_tr2</span> <span class="o">=</span> <span class="n">sns</span><span class="o">.</span><span class="n">jointplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s2">&quot;Normalized Ratio L/H 1&quot;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s2">&quot;Normalized Ratio L/H 2&quot;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">proteins_br2</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="s2">&quot;reg&quot;</span><span class="p">)</span>
 <span class="n">br2_tr1_tr2</span><span class="o">.</span><span class="n">annotate</span><span class="p">(</span><span class="n">stats</span><span class="o">.</span><span class="n">pearsonr</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s1">&#39;BR2_TR1&amp;TR2_correlation.svg&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s1">&#39;figures/BR2_TR1&amp;TR2_correlation.svg&#39;</span><span class="p">)</span>
 </pre></div>
 
     </div>
@@ -13524,7 +13524,7 @@ div#notebook {
 <span class="n">proteins</span><span class="p">[</span><span class="s1">&#39;Norm LH BR2&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">proteins</span><span class="p">[</span><span class="s1">&#39;Normalized Ratio L/H IEF2_1&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="n">proteins</span><span class="p">[</span><span class="s1">&#39;Normalized Ratio L/H IEF2_2&#39;</span><span class="p">])</span> <span class="o">/</span> <span class="mi">2</span>
 <span class="n">g</span><span class="o">=</span><span class="n">sns</span><span class="o">.</span><span class="n">jointplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s2">&quot;Norm LH BR1&quot;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s2">&quot;Norm LH BR2&quot;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">proteins</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="s2">&quot;reg&quot;</span><span class="p">)</span>
 <span class="n">g</span><span class="o">.</span><span class="n">annotate</span><span class="p">(</span><span class="n">stats</span><span class="o">.</span><span class="n">pearsonr</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s1">&#39;BR1&amp;BR2_correlation.svg&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s1">&#39;figures/BR1&amp;BR2_correlation.svg&#39;</span><span class="p">)</span>
 <span class="c1"># Corr. of seperate analysis</span>
 <span class="c1">#br_merged = proteins_br1.merge(proteins_br2, left_on=&quot;Protein IDs&quot;, right_on=&quot;Protein IDs&quot;)</span>
 <span class="c1">#sns.jointplot(x=&quot;Normalized Ratio L/H_x&quot;, y=&quot;Normalized Ratio L/H_y&quot;, data=br_merged, kind=&quot;reg&quot;)</span>

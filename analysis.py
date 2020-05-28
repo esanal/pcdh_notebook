@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[1]:
+# In[16]:
 
 
 import matplotlib
@@ -18,18 +18,18 @@ from utilities import *
 
 # ### Data import & filter
 
-# In[2]:
+# In[17]:
 
 
 #Read from txt and xlsx and filter
-proteins = pd.read_csv('proteinGroups.txt', index_col='id', delimiter = '\t')
+proteins = pd.read_csv('data/proteinGroups.txt', index_col='id', delimiter = '\t')
 #filter and keep the replicates separate
 proteins = remove_cont_and_nan(proteins)
 # Filtering non human proteins from the main file
 proteins['genename'] = proteins['Gene names'].str.split(';').str[0]
 proteins['Fastas'] = proteins['Fasta headers'].str.split(';')
 #read uniprot human data
-uniprot_human = pd.read_csv('uniprot_human_gn.tab.tsv', sep = '\t')
+uniprot_human = pd.read_csv('data/uniprot_human_gn.tab.tsv', sep = '\t')
 uniprot_human_list = uniprot_human.Entry.tolist()
 #check if protein group includes human protein
 for i in proteins.index:
@@ -57,7 +57,7 @@ proteins['Normalized Ratio L/H IEF2_2'] = -1*np.log2(proteins['Ratio H/L IEF2_2'
 
 # ### Normality test
 
-# In[3]:
+# In[18]:
 
 
 from statsmodels.graphics.gofplots import qqplot
@@ -70,7 +70,7 @@ kstest(proteins['Normalized Ratio L/H'], 'norm')
 
 # ## Significant proteins and distribution of Normalized H/L ratios
 
-# In[4]:
+# In[19]:
 
 
 #Find significantly up and down regulated proteins
@@ -80,12 +80,12 @@ MAD = np.absolute(proteins['Normalized Ratio L/H']-median).median() * 1.4826
 proteins['significant'] = np.absolute(proteins['Normalized Ratio L/H']-median)/MAD > 1.645
 #select the significats and save
 significants = proteins[(proteins['significant'] == True)]
-significants.to_csv('Significants_90.txt', sep='\t', index=False)
+significants.to_csv('results/Significants_90.txt', sep='\t', index=False)
 #export all proteins with the significance and normalized ratio
-proteins.to_csv('proteins_all_90.txt', sep='\t', index=False)
+proteins.to_csv('results/proteins_all_90.txt', sep='\t', index=False)
 
 
-# In[5]:
+# In[20]:
 
 
 #LH distribution boxplots
@@ -104,10 +104,10 @@ for patch, color in zip(bp['boxes'], colors):
 ax.yaxis.grid(True, linestyle='-', which='major', color='lightgrey',
                alpha=0.5)
 # Save the figure
-fig.savefig('LH_boxplot_normalized.svg', bbox_inches='tight')
+fig.savefig('figures/LH_boxplot_normalized.svg', bbox_inches='tight')
 
 
-# In[6]:
+# In[21]:
 
 
 #LH histogram combined
@@ -157,17 +157,17 @@ for i,term in enumerate(['Actin cytoskeleton associated','Myosin','Focal adhesio
                 color= colors[i],weight = 'bold')    
 #adjust spines
 adjust_spines(ax, ['left', 'bottom'])
-plt.savefig('HL_combined_histogram_GOs_10percent_biggerfont_sized.svg')
-proteins.to_csv('proteins_all_LH.txt', sep = '\t', index = False)
+plt.savefig('figures/HL_combined_histogram_GOs_10percent_biggerfont_sized.svg')
+proteins.to_csv('results/proteins_all_LH.txt', sep = '\t', index = False)
 
 
 # ## Correlation of biological replicates
 
-# In[7]:
+# In[22]:
 
 
-proteins_br1 = pd.read_excel('IEF1_7_1.xlsx', index_col='id', delimiter = '\t')
-proteins_br2 = pd.read_excel('IEF2 7_5 with new analysis.xlsx', index_col='id', delimiter = '\t')
+proteins_br1 = pd.read_excel('data/IEF1_7_1.xlsx', index_col='id', delimiter = '\t')
+proteins_br2 = pd.read_excel('data/IEF2 7_5 with new analysis.xlsx', index_col='id', delimiter = '\t')
 proteins_br1 = remove_cont_and_nan(proteins_br1)
 proteins_br2 = remove_cont_and_nan(proteins_br2)
 
@@ -187,29 +187,29 @@ proteins_br2['Normalized Ratio L/H 2'] = -1*np.log2(proteins_br2['Ratio H/L 2'] 
 # ## Correlation of technical replicates
 # ### BR1: TR1 and TR2
 
-# In[8]:
+# In[23]:
 
 
 #BR1: TR1 and TR2
 br1_tr1_tr2 = sns.jointplot(x="Normalized Ratio L/H 1", y="Normalized Ratio L/H 2", data=proteins_br1, kind="reg")
 br1_tr1_tr2.annotate(stats.pearsonr)
-plt.savefig('BR1_TR1&TR2_correlation.svg')
+plt.savefig('figures/BR1_TR1&TR2_correlation.svg')
 
 
 # ### BR2: TR1 and TR2
 
-# In[9]:
+# In[24]:
 
 
 #BR2: TR1 and TR2
 br2_tr1_tr2 = sns.jointplot(x="Normalized Ratio L/H 1", y="Normalized Ratio L/H 2", data=proteins_br2, kind="reg")
 br2_tr1_tr2.annotate(stats.pearsonr)
-plt.savefig('BR2_TR1&TR2_correlation.svg')
+plt.savefig('figures/BR2_TR1&TR2_correlation.svg')
 
 
 # ### Compare BR1 and BR2
 
-# In[10]:
+# In[25]:
 
 
 # Compare BR1 and BR2 (maxquant report of the main combined protein list)
@@ -217,7 +217,7 @@ proteins['Norm LH BR1'] = (proteins['Normalized Ratio L/H IEF1_1'] + proteins['N
 proteins['Norm LH BR2'] = (proteins['Normalized Ratio L/H IEF2_1'] + proteins['Normalized Ratio L/H IEF2_2']) / 2
 g=sns.jointplot(x="Norm LH BR1", y="Norm LH BR2", data=proteins, kind="reg")
 g.annotate(stats.pearsonr)
-plt.savefig('BR1&BR2_correlation.svg')
+plt.savefig('figures/BR1&BR2_correlation.svg')
 # Corr. of seperate analysis
 #br_merged = proteins_br1.merge(proteins_br2, left_on="Protein IDs", right_on="Protein IDs")
 #sns.jointplot(x="Normalized Ratio L/H_x", y="Normalized Ratio L/H_y", data=br_merged, kind="reg")
@@ -225,7 +225,7 @@ plt.savefig('BR1&BR2_correlation.svg')
 
 # ## Summary table
 
-# In[11]:
+# In[26]:
 
 
 summary_df = {"Protein Groups": [len(proteins[["Ratio H/L IEF1_1", "Ratio H/L IEF1_2"]].dropna()),
@@ -238,7 +238,7 @@ summary_df = {"Protein Groups": [len(proteins[["Ratio H/L IEF1_1", "Ratio H/L IE
              }
 
 
-# In[12]:
+# In[27]:
 
 
 summary_df
