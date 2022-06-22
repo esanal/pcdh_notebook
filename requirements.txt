@@ -7,7 +7,7 @@ matplotlib == 3.2.1
 # pcdh_notebook/.ipynb_checkpoints/analysis-checkpoint.ipynb: 5
 # pcdh_notebook/analysis.ipynb: 5
 # pcdh_notebook/utilities.py: 3
-numpy == 1.17.2
+numpy == 1.22.0
 
 # pcdh_notebook/.ipynb_checkpoints/analysis-checkpoint.ipynb: 4
 # pcdh_notebook/analysis.ipynb: 4
